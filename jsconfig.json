@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "utils/": ["./utils"],
+      "services/": ["./services"],
+      "components/": ["./components"],
+      "styles/": ["./styles"],
+      "assets/": ["./assets"]
+    }
+  }
+}

@@ -4,5 +4,21 @@
     "development": {
       "plugins": ["transform-react-jsx-source"]
     }
-  }
+  },
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["."],
+        "alias": {
+          "services": "./services",
+          "utils": "./utils",
+          "components": "./components",
+          "styles": "./styles",
+          "assets": "./assets"
+        },
+        "cwd": "babelrc"
+      }
+    ]
+  ]
 }
