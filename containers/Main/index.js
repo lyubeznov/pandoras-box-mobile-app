@@ -26,6 +26,7 @@ const TEST = false
 export default class Main extends Component {
   state = {
     online: false,
+    setImmediately: true,
     blur: {
       enabled: false,
       intensity: new Animated.Value(0),
@@ -140,13 +141,17 @@ export default class Main extends Component {
       brightness,
     })
 
-    // BoxService.setBrightness(brightness)
+    if (this.state.setImmediately) {
+      BoxService.setBrightness(brightness)
+    }
   }
 
   handleColorChange = color => {
     this.setState({ color })
 
-    // BoxService.setColor(color)
+    if (this.state.setImmediately) {
+      BoxService.setColor(color)
+    }
   }
 
   handleSetAsDefault = () => {

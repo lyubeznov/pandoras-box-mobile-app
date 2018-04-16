@@ -1,18 +1,18 @@
 import uuid from 'uuid/v4'
 
 export const COMMANDS = {
-  PING: 'PING',
+  PING: '/ping',
 
-  POWER_ON: 'POWER_ON',
-  POWER_OFF: 'POWER_OFF',
+  POWER_ON: '/power',
+  POWER_OFF: '/power',
 
-  SET_COLOR: 'SET_COLOR',
-  SET_BRIGHTNESS: 'SET_BRIGHTNESS',
+  SET_COLOR: '/color',
+  SET_BRIGHTNESS: '/brightness',
 
-  SET_DEFAULT: 'SET_DEFAULT',
+  SET_DEFAULT: '/default',
 
-  GET_CONFIGURATION: 'GET_CONFIGURATION',
-  SET_CONFIGURATION: 'SET_CONFIGURATION',
+  GET_CONFIGURATION: '/configuration',
+  SET_CONFIGURATION: '/configuration',
 }
 
 export default class BoxService {
@@ -20,28 +20,32 @@ export default class BoxService {
     this.apiService = apiService
   }
 
-  sendCommand = (action, payload) => this.apiService.post('http://pandoras.box/command', {
-    type: action,
-    ...payload,
-  })
-
   ping = () => {
     const payload = uuid()
 
-    return this.sendCommand(COMMANDS.PING, { payload }).then(res => payload === res.pong)
+    return this.apiService.get(COMMANDS.PING, { payload }).then(res => payload === res)
   }
 
-  powerOn = () => this.sendCommand(COMMANDS.POWER_ON)
+  powerOn = () => this.apiService.post(COMMANDS.POWER_ON, { status: 'on' })
 
-  powerOff = () => this.sendCommand(COMMANDS.POWER_OFF)
+  powerOff = () => this.apiService.post(COMMANDS.POWER_OFF, { status: 'off' })
 
-  setColor = color => this.sendCommand(COMMANDS.SET_COLOR, color)
+  setColor = color => this.apiService.post(COMMANDS.SET_COLOR, {
+    colorH: color.h,
+    colorS: color.s,
+    colorV: color.v,
+  })
 
-  setBrightness = brightness => this.sendCommand(COMMANDS.SET_BRIGHTNESS, brightness)
+  setBrightness = brightness => this.apiService.post(COMMANDS.SET_BRIGHTNESS, { brightness })
 
-  setDefault = () => this.sendCommand(COMMANDS.SET_DEFAULT)
+  setDefault = () => this.apiService.post(COMMANDS.SET_DEFAULT)
 
-  getConfiguration = () => this.sendCommand(COMMANDS.GET_CONFIGURATION)
+  getConfiguration = () => this.apiService.get(COMMANDS.GET_CONFIGURATION)
 
-  setConfiguration = configuration => this.sendCommand(COMMANDS.SET_CONFIGURATION, configuration)
+  setConfiguration = configuration => this.apiService.post(COMMANDS.SET_CONFIGURATION, {
+    brightness: configuration.brightness,
+    colorH: configuration.color.h,
+    colorS: configuration.color.s,
+    colorV: configuration.color.v,
+  })
 }
